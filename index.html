@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Calculator</title>
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>JSON Calculator</h1>
+        <form name="calculatorForm">
+            <input type="text" name="display" id="display" disabled>
+            <br>
+            <!-- Buttons for digits and operators -->
+            <input type="button" value="1" onclick="appendToDisplay('1')">
+            <input type="button" value="2" onclick="appendToDisplay('2')">
+            <input type="button" value="3" onclick="appendToDisplay('3')">
+            <input type="button" value="+" onclick="appendToDisplay('+')">
+            <br>
+            <input type="button" value="4" onclick="appendToDisplay('4')">
+            <input type="button" value="5" onclick="appendToDisplay('5')">
+            <input type="button" value="6" onclick="appendToDisplay('6')">
+            <input type="button" value="-" onclick="appendToDisplay('-')">
+            <br>
+            <input type="button" value="7" onclick="appendToDisplay('7')">
+            <input type="button" value="8" onclick="appendToDisplay('8')">
+            <input type="button" value="9" onclick="appendToDisplay('9')">
+            <input type="button" value="*" onclick="appendToDisplay('*')">
+            <br>
+            <input type="button" value="C" onclick="clearDisplay()">
+            <input type="button" value="0" onclick="appendToDisplay('0')">
+            <input type="button" value="=" id="equals-btn" onclick="calculate()">
+            <input type="button" value="/" onclick="appendToDisplay('/')">
+        </form>
+    </div>
+
+    <script>
+        // Function to append values to the display
+        function appendToDisplay(value) {
+            document.calculatorForm.display.value += value;
+        }
+
+        // Function to clear the display
+        function clearDisplay() {
+            document.calculatorForm.display.value = '';
+        }
+
+        // Function to calculate and store the result in JSON
+        function calculate() {
+            try {
+                const expression = document.calculatorForm.display.value;
+                const result = eval(expression);
+                document.calculatorForm.display.value = result;
+
+                // Store the calculation in JSON
+                const calculation = {
+                    expression: expression,
+                    result: result,
+                };
+
+                // Retrieve previous calculations from JSON
+                let calculations = localStorage.getItem('calculations');
+                if (calculations) {
+                    calculations = JSON.parse(calculations);
+                } else {
+                    calculations = [];
+                }
+
+                // Add the new calculation to the array
+                calculations.push(calculation);
+
+                // Save the updated calculations in JSON
+                localStorage.setItem('calculations', JSON.stringify(calculations));
+            } catch (error) {
+                document.calculatorForm.display.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>
